@@ -28,21 +28,12 @@ public class MemberRepository extends AbstractRepository implements MemberDao {
         member.setEmail(email);
         member.setPassword(password);
 
-        System.out.println("TRYINGGGG TOOOO SAAAAAAAAAAVVVEEEEEEEEE");
-        Object idSave = null;
-        try {
+        Transaction tx = currentSession().beginTransaction();
 
-            Transaction tx = currentSession().beginTransaction();
+        Object idSave = currentSession().save(member);
 
-            idSave = currentSession().save(member);
-
-            currentSession().flush();
-            tx.commit();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        log.debug("SAVEEEEEE " + idSave.toString());
+        currentSession().flush();
+        tx.commit();
 
         return new Member(new Long(idSave.toString()));
     }
